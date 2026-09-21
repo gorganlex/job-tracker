@@ -26,9 +26,10 @@ export const ApplicationsStatusFilter = ({
     <button
       style={selectedStatus === status ? { backgroundColor: 'lightgray' } : {}}
       key={status}
+      disabled={!statusCountMap[status]}
       onClick={() => onStatusClick(status)}
     >
-      {status} {statusCountMap[status]}
+      {status} {statusCountMap[status] || 0}
     </button>
   );
 
