@@ -14,16 +14,16 @@ export const App = () => {
   const filteredApplications =
     selectedStatus === ApplicationStatusFilterAll
       ? applications
-      : applications.filter((app) => app.status === ApplicationStatusFilterAll);
+      : applications.filter((app) => app.status === selectedStatus);
 
-  const handleOnStatusClick = (status) => setSelectedStatus(status);
+  const handleStatusClick = (status) => setSelectedStatus(status);
 
   return (
     <div>
       <ApplicationsStatusFilter
         applications={applications}
         selectedStatus={selectedStatus}
-        onStatusClick={handleOnStatusClick}
+        onStatusClick={handleStatusClick}
       />
       <ApplicationsTable applications={filteredApplications} />
     </div>
