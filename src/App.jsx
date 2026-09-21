@@ -24,6 +24,16 @@ export const App = () => {
     );
   };
 
+  const handleFavoriteApplication = (id) => {
+    setApplications((applications) =>
+      applications.map((application) =>
+        application.id === id
+          ? { ...application, favorite: !application.favorite }
+          : application,
+      ),
+    );
+  };
+
   return (
     <div>
       <ApplicationsStatusFilter
@@ -33,6 +43,7 @@ export const App = () => {
       />
       <ApplicationsTable
         applications={filteredApplications}
+        onFavoriteApplication={handleFavoriteApplication}
         onDeleteApplication={handleDeleteApplication}
       />
     </div>

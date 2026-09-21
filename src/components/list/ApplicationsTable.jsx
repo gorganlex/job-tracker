@@ -1,7 +1,11 @@
 import { ApplicationRow } from './ApplicationRow';
 import { NoApplications } from './NoApplications';
 
-export const ApplicationsTable = ({ applications, onDeleteApplication }) => {
+export const ApplicationsTable = ({
+  applications,
+  onFavoriteApplication,
+  onDeleteApplication,
+}) => {
   return applications.length ? (
     <table>
       <thead>
@@ -21,6 +25,7 @@ export const ApplicationsTable = ({ applications, onDeleteApplication }) => {
           <ApplicationRow
             key={application.id}
             application={application}
+            onFavoriteApplication={() => onFavoriteApplication(application.id)}
             onDeleteApplication={() => onDeleteApplication(application.id)}
           />
         ))}
