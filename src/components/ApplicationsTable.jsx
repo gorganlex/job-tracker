@@ -1,4 +1,4 @@
-import { ApplicationRow } from './ApplicationRow';
+import { ApplicationRow } from './list/ApplicationRow';
 import { NoApplications } from './NoApplications';
 
 export const ApplicationsTable = ({ applications, onDeleteApplication }) => {

@@ -1,6 +1,6 @@
 import { formatDate } from '../../utils/date';
 
-export const ApplicationRow = ({ application }) => {
+export const ApplicationRow = ({ application, onDeleteApplication }) => {
   const { company, role, status, dateApplied, location, tags } = application;
 
   // tags can be duplicated so add an index to the key to ensure uniqueness
@@ -30,7 +30,7 @@ export const ApplicationRow = ({ application }) => {
       <td>{renderTags(tags)}</td>
       <td>
         <button>Edit</button>
-        <button>Delete</button>
+        <button onClick={onDeleteApplication}>Delete</button>
       </td>
     </tr>
   );
