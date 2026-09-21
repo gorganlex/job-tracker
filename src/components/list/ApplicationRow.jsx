@@ -1,4 +1,4 @@
-import { formatDate } from '../utils/date';
+import { formatDate } from '../../utils/date';
 
 export const ApplicationRow = ({ application }) => {
   const { company, role, status, dateApplied, location, tags } = application;
