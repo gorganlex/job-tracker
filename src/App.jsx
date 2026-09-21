@@ -4,17 +4,21 @@ import { seedApplications } from './data/seedApplications';
 import { ApplicationsTable } from './components/list/ApplicationsTable';
 import { ApplicationStatusFilterAll } from './data/applicationStatus';
 import { ApplicationsStatusFilter } from './components/list/ApplicationsStatusFilter';
+import { AddApplicationModal } from './components/list/AddApplicationModal';
 
 export const App = () => {
   const [applications, setApplications] = useState([...seedApplications]);
   const [selectedStatus, setSelectedStatus] = useState(
     ApplicationStatusFilterAll,
   );
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const filteredApplications =
     selectedStatus === ApplicationStatusFilterAll
       ? applications
       : applications.filter((app) => app.status === selectedStatus);
+
+  const toggleAddApplicationModal = () => setIsAddModalOpen((open) => !open);
 
   const handleStatusClick = (status) => setSelectedStatus(status);
 
@@ -36,6 +40,8 @@ export const App = () => {
 
   return (
     <div>
+      <button onClick={toggleAddApplicationModal}>Add Application</button>
+      {isAddModalOpen && <AddApplicationModal />}
       <ApplicationsStatusFilter
         applications={applications}
         selectedStatus={selectedStatus}
