@@ -41,7 +41,9 @@ export const App = () => {
   return (
     <div>
       <button onClick={toggleAddApplicationModal}>Add Application</button>
-      {isAddModalOpen && <AddApplicationModal />}
+      {isAddModalOpen && (
+        <AddApplicationModal onClose={toggleAddApplicationModal} />
+      )}
       <ApplicationsStatusFilter
         applications={applications}
         selectedStatus={selectedStatus}
