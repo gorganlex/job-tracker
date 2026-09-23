@@ -3,7 +3,7 @@ import { ApplicationStatus } from '../../data/applicationStatus';
 import { useEffect, useRef, useState } from 'react';
 import { getApplicationDraft } from '../../utils/application';
 
-export const AddApplicationModal = ({ onClose }) => {
+export const AddApplicationModal = ({ onClose, onAddApplication }) => {
   const [draftApplication, setDraftApplication] = useState(getApplicationDraft);
   const [draftTag, setDraftTag] = useState('');
 
@@ -15,7 +15,7 @@ export const AddApplicationModal = ({ onClose }) => {
     setDraftApplication((draft) => ({ ...draft, [field]: value }));
 
   const handleTagInputKeyDown = (event) => {
-    if (event.keyCode === 'Enter') {
+    if (event.key === 'Enter') {
       event.preventDefault();
 
       const trimmedDraftTag = draftTag.trim();
@@ -38,7 +38,7 @@ export const AddApplicationModal = ({ onClose }) => {
       tags: app.tags.filter((_, tagIndex) => tagIndex !== toDeleteIndex),
     }));
 
-  const handleSave = () => console.log(draftApplication);
+  const handleSave = () => onAddApplication(draftApplication);
 
   const content = (
     <div className="add-modal-wrapper">

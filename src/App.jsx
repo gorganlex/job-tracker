@@ -20,6 +20,11 @@ export const App = () => {
 
   const toggleAddApplicationModal = () => setIsAddModalOpen((open) => !open);
 
+  const handleAddApplication = (application) => {
+    setApplications((applications) => [...applications, application]);
+    toggleAddApplicationModal();
+  };
+
   const handleStatusClick = (status) => setSelectedStatus(status);
 
   const handleDeleteApplication = (id) => {
@@ -42,7 +47,10 @@ export const App = () => {
     <div>
       <button onClick={toggleAddApplicationModal}>Add Application</button>
       {isAddModalOpen && (
-        <AddApplicationModal onClose={toggleAddApplicationModal} />
+        <AddApplicationModal
+          onClose={toggleAddApplicationModal}
+          onAddApplication={handleAddApplication}
+        />
       )}
       <ApplicationsStatusFilter
         applications={applications}
