@@ -4,6 +4,7 @@ import { NoApplications } from './NoApplications';
 export const ApplicationsTable = ({
   applications,
   onFavoriteApplication,
+  onEditApplication,
   onDeleteApplication,
 }) => {
   return applications.length ? (
@@ -26,6 +27,7 @@ export const ApplicationsTable = ({
             key={application.id}
             application={application}
             onFavoriteApplication={() => onFavoriteApplication(application.id)}
+            onEditApplication={() => onEditApplication(application.id)}
             onDeleteApplication={() => onDeleteApplication(application.id)}
           />
         ))}
