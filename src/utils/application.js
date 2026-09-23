@@ -5,4 +5,5 @@ export const getApplicationDraft = () => ({
   role: '',
   status: ApplicationStatus.APPLIED,
   dateApplied: new Date().toLocaleDateString('sv-SE'),
+  tags: [],
 });
