@@ -36,7 +36,6 @@ export const App = () => {
           app.id === application.id ? application : app,
         ),
       );
-      setApplicationInEdit(undefined);
     }
 
     toggleAddEditApplicationModal();
@@ -61,7 +60,9 @@ export const App = () => {
   };
 
   const handleEditApplication = (id) => {
-    setApplicationInEdit(applications.find(({ id: appId }) => appId === id));
+    setApplicationInEdit({
+      ...applications.find(({ id: appId }) => appId === id),
+    });
     toggleAddEditApplicationModal();
   };
 

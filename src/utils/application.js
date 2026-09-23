@@ -9,4 +9,5 @@ export const getApplicationDraft = () => ({
   dateApplied: new Date().toLocaleDateString('sv-SE'),
   tags: [],
   interviews: [],
+  favorite: false,
 });

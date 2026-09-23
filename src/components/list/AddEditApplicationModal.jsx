@@ -52,9 +52,8 @@ export const AddEditApplicationModal = ({
         <button className="add-modal-close" onClick={onClose}>
           X
         </button>
-        <h2>Add application model</h2>
+        <h2>{`${application ? 'Edit' : 'Add'} application`}</h2>
         <p>Interview rounds are added later, from the detail page.</p>
-
         <form
           className="add-form"
           onSubmit={(event) => {
