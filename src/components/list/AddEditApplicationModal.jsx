@@ -3,8 +3,14 @@ import { ApplicationStatus } from '../../data/applicationStatus';
 import { useEffect, useRef, useState } from 'react';
 import { getApplicationDraft } from '../../utils/application';
 
-export const AddApplicationModal = ({ onClose, onAddApplication }) => {
-  const [draftApplication, setDraftApplication] = useState(getApplicationDraft);
+export const AddEditApplicationModal = ({
+  application,
+  onClose,
+  onSubmitApplication,
+}) => {
+  const [draftApplication, setDraftApplication] = useState(
+    application || getApplicationDraft,
+  );
   const [draftTag, setDraftTag] = useState('');
 
   const companyFieldRef = useRef();
@@ -38,7 +44,7 @@ export const AddApplicationModal = ({ onClose, onAddApplication }) => {
       tags: app.tags.filter((_, tagIndex) => tagIndex !== toDeleteIndex),
     }));
 
-  const handleSave = () => onAddApplication(draftApplication);
+  const handleSave = () => onSubmitApplication(draftApplication);
 
   const content = (
     <div className="add-modal-wrapper">

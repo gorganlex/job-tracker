@@ -4,25 +4,42 @@ import { seedApplications } from './data/seedApplications';
 import { ApplicationsTable } from './components/list/ApplicationsTable';
 import { ApplicationStatusFilterAll } from './data/applicationStatus';
 import { ApplicationsStatusFilter } from './components/list/ApplicationsStatusFilter';
-import { AddApplicationModal } from './components/list/AddApplicationModal';
+import { AddEditApplicationModal } from './components/list/AddEditApplicationModal';
 
 export const App = () => {
   const [applications, setApplications] = useState([...seedApplications]);
   const [selectedStatus, setSelectedStatus] = useState(
     ApplicationStatusFilterAll,
   );
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isAddEditModalOpen, setIsAddEditModalOpen] = useState(false);
+  const [applicationInEdit, setApplicationInEdit] = useState();
 
   const filteredApplications =
     selectedStatus === ApplicationStatusFilterAll
       ? applications
       : applications.filter((app) => app.status === selectedStatus);
 
-  const toggleAddApplicationModal = () => setIsAddModalOpen((open) => !open);
+  const toggleAddEditApplicationModal = () => {
+    if (isAddEditModalOpen) {
+      setApplicationInEdit(undefined);
+    }
 
-  const handleAddApplication = (application) => {
-    setApplications((applications) => [...applications, application]);
-    toggleAddApplicationModal();
+    setIsAddEditModalOpen((open) => !open);
+  };
+
+  const handleSubmitApplication = (application) => {
+    if (!applicationInEdit) {
+      setApplications((applications) => [...applications, application]);
+    } else {
+      setApplications((applications) =>
+        applications.map((app) =>
+          app.id === application.id ? application : app,
+        ),
+      );
+      setApplicationInEdit(undefined);
+    }
+
+    toggleAddEditApplicationModal();
   };
 
   const handleStatusClick = (status) => setSelectedStatus(status);
@@ -43,13 +60,19 @@ export const App = () => {
     );
   };
 
+  const handleEditApplication = (id) => {
+    setApplicationInEdit(applications.find(({ id: appId }) => appId === id));
+    toggleAddEditApplicationModal();
+  };
+
   return (
     <div>
-      <button onClick={toggleAddApplicationModal}>Add Application</button>
-      {isAddModalOpen && (
-        <AddApplicationModal
-          onClose={toggleAddApplicationModal}
-          onAddApplication={handleAddApplication}
+      <button onClick={toggleAddEditApplicationModal}>Add Application</button>
+      {isAddEditModalOpen && (
+        <AddEditApplicationModal
+          application={applicationInEdit}
+          onClose={toggleAddEditApplicationModal}
+          onSubmitApplication={handleSubmitApplication}
         />
       )}
       <ApplicationsStatusFilter
@@ -60,6 +83,7 @@ export const App = () => {
       <ApplicationsTable
         applications={filteredApplications}
         onFavoriteApplication={handleFavoriteApplication}
+        onEditApplication={handleEditApplication}
         onDeleteApplication={handleDeleteApplication}
       />
     </div>
