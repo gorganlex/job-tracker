@@ -17,6 +17,16 @@ export const AddEditApplicationModal = ({
 
   useEffect(() => companyFieldRef.current.focus(), []);
 
+  useEffect(() => {
+    const escapeEventListener = (event) => {
+      if (event.key === 'Escape') onClose();
+    };
+
+    document.addEventListener('keydown', escapeEventListener);
+
+    return () => document.removeEventListener('keydown', escapeEventListener);
+  }, [onClose]);
+
   const onChangeDraft = (field, value) =>
     setDraftApplication((draft) => ({ ...draft, [field]: value }));
 
