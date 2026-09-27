@@ -1,12 +1,11 @@
 import { formatDate } from '../../utils/date';
+import { StoreActions } from '../../store/storeReducer';
+import { useStoreDispatch } from '../../store/storeContext';
 
-export const ApplicationRow = ({
-  application,
-  onFavoriteApplication,
-  onEditApplication,
-  onDeleteApplication,
-}) => {
-  const { company, role, status, dateApplied, location, tags, favorite } =
+export const ApplicationRow = ({ application }) => {
+  const dispatch = useStoreDispatch();
+
+  const { id, company, role, status, dateApplied, location, tags, favorite } =
     application;
 
   // tags can be duplicated so add an index to the key to ensure uniqueness
@@ -25,12 +24,23 @@ export const ApplicationRow = ({
       .map((tag, index) => renderTag(tag, index));
   };
 
+  const handleFavoriteClick = () =>
+    dispatch({ type: StoreActions.favoriteApplication, id });
+
+  const handleEditClick = () => {
+    dispatch({ type: StoreActions.setApplicationInEditId, id });
+    dispatch({ type: StoreActions.toggleApplicationActionModal });
+  };
+
+  const handleDeleteClick = () =>
+    dispatch({ type: StoreActions.deleteApplication, id });
+
   return (
     <tr>
       <td>
         <button
           style={{ background: favorite ? 'yellow' : 'lightgray' }}
-          onClick={onFavoriteApplication}
+          onClick={handleFavoriteClick}
         >
           STAR
         </button>
@@ -42,8 +52,8 @@ export const ApplicationRow = ({
       <td>{location}</td>
       <td>{renderTags(tags)}</td>
       <td>
-        <button onClick={onEditApplication}>Edit</button>
-        <button onClick={onDeleteApplication}>Delete</button>
+        <button onClick={handleEditClick}>Edit</button>
+        <button onClick={handleDeleteClick}>Delete</button>
       </td>
     </tr>
   );

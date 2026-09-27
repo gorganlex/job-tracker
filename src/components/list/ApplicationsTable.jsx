@@ -1,13 +1,17 @@
+import { useStore } from '../../store/storeContext';
 import { ApplicationRow } from './ApplicationRow';
 import { NoApplications } from './NoApplications';
+import { ApplicationStatusFilterAll } from '../../data/applicationStatus';
 
-export const ApplicationsTable = ({
-  applications,
-  onFavoriteApplication,
-  onEditApplication,
-  onDeleteApplication,
-}) => {
-  return applications.length ? (
+export const ApplicationsTable = () => {
+  const { applications, statusFilter } = useStore();
+
+  const filteredApplications =
+    statusFilter === ApplicationStatusFilterAll
+      ? applications
+      : applications.filter((app) => app.status === statusFilter);
+
+  return filteredApplications.length ? (
     <table>
       <thead>
         <tr>
@@ -22,14 +26,8 @@ export const ApplicationsTable = ({
         </tr>
       </thead>
       <tbody>
-        {applications.map((application) => (
-          <ApplicationRow
-            key={application.id}
-            application={application}
-            onFavoriteApplication={() => onFavoriteApplication(application.id)}
-            onEditApplication={() => onEditApplication(application.id)}
-            onDeleteApplication={() => onDeleteApplication(application.id)}
-          />
+        {filteredApplications.map((application) => (
+          <ApplicationRow key={application.id} application={application} />
         ))}
       </tbody>
     </table>

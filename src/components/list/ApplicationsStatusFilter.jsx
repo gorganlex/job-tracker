@@ -2,12 +2,13 @@ import {
   ApplicationStatus,
   ApplicationStatusFilterAll,
 } from '../../data/applicationStatus';
+import { useStore, useStoreDispatch } from '../../store/storeContext';
+import { StoreActions } from '../../store/storeReducer';
 
-export const ApplicationsStatusFilter = ({
-  applications,
-  selectedStatus,
-  onStatusClick,
-}) => {
+export const ApplicationsStatusFilter = () => {
+  const { applications, statusFilter } = useStore();
+  const dispatch = useStoreDispatch();
+
   const statusCountMap = applications.reduce(
     (acc, app) => {
       if (acc[app.status]) {
@@ -22,12 +23,15 @@ export const ApplicationsStatusFilter = ({
     },
   );
 
+  const handleStatusClick = (status) =>
+    dispatch({ type: StoreActions.setStatusFilter, statusFilter: status });
+
   const renderStatusChip = (status) => (
     <button
-      style={selectedStatus === status ? { backgroundColor: 'lightgray' } : {}}
+      style={statusFilter === status ? { backgroundColor: 'lightgray' } : {}}
       key={status}
       disabled={!statusCountMap[status]}
-      onClick={() => onStatusClick(status)}
+      onClick={() => handleStatusClick(status)}
     >
       {status} {statusCountMap[status] || 0}
     </button>
@@ -35,9 +39,8 @@ export const ApplicationsStatusFilter = ({
 
   return (
     <div>
-      {renderStatusChip(ApplicationStatusFilterAll)}
-      {Object.values(ApplicationStatus).map((status) =>
-        renderStatusChip(status),
+      {[ApplicationStatusFilterAll, ...Object.values(ApplicationStatus)].map(
+        renderStatusChip,
       )}
     </div>
   );

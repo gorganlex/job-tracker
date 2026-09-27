@@ -1,33 +1,49 @@
 import { createPortal } from 'react-dom';
 import { ApplicationStatus } from '../../data/applicationStatus';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { getApplicationDraft } from '../../utils/application';
+import { useStore, useStoreDispatch } from '../../store/storeContext';
+import { StoreActions } from '../../store/storeReducer';
 
-export const AddEditApplicationModal = ({
-  application,
-  onClose,
-  onSubmitApplication,
-}) => {
+export const AddEditApplicationModal = () => {
+  const { applications, applicationInEditId } = useStore();
+  const dispatch = useStoreDispatch();
+
+  const applicationInEdit = applications.find(
+    ({ id }) => id === applicationInEditId,
+  );
+
   const [draftApplication, setDraftApplication] = useState(
-    application || getApplicationDraft,
+    applicationInEdit || getApplicationDraft,
   );
   const [draftTag, setDraftTag] = useState('');
 
   const companyFieldRef = useRef();
 
+  const handleCloseModal = useCallback(() => {
+    dispatch({ type: StoreActions.toggleApplicationActionModal });
+    dispatch({ type: StoreActions.setApplicationInEditId, id: null });
+  }, [dispatch]);
+
   useEffect(() => companyFieldRef.current.focus(), []);
 
   useEffect(() => {
     const escapeEventListener = (event) => {
-      if (event.key === 'Escape') onClose();
+      if (event.key === 'Escape') handleCloseModal();
     };
 
     document.addEventListener('keydown', escapeEventListener);
 
     return () => document.removeEventListener('keydown', escapeEventListener);
-  }, [onClose]);
+  }, [handleCloseModal]);
 
-  const onChangeDraft = (field, value) =>
+  const handleModalBackdropClick = (event) => {
+    if (event.target === event.currentTarget) {
+      handleCloseModal();
+    }
+  };
+
+  const handleChangeDraft = (field, value) =>
     setDraftApplication((draft) => ({ ...draft, [field]: value }));
 
   const handleTagInputKeyDown = (event) => {
@@ -54,15 +70,26 @@ export const AddEditApplicationModal = ({
       tags: app.tags.filter((_, tagIndex) => tagIndex !== toDeleteIndex),
     }));
 
-  const handleSave = () => onSubmitApplication(draftApplication);
+  const handleSave = () => {
+    const type = applicationInEditId
+      ? StoreActions.editApplication
+      : StoreActions.addApplication;
+
+    dispatch({
+      type,
+      application: draftApplication,
+    });
+
+    handleCloseModal();
+  };
 
   const content = (
-    <div className="add-modal-wrapper">
+    <div className="add-modal-wrapper" onClick={handleModalBackdropClick}>
       <div className="add-modal">
-        <button className="add-modal-close" onClick={onClose}>
+        <button className="add-modal-close" onClick={handleCloseModal}>
           X
         </button>
-        <h2>{`${application ? 'Edit' : 'Add'} application`}</h2>
+        <h2>{`${applicationInEdit ? 'Edit' : 'Add'} application`}</h2>
         <p>Interview rounds are added later, from the detail page.</p>
         <form
           className="add-form"
@@ -81,7 +108,7 @@ export const AddEditApplicationModal = ({
                 name="company"
                 value={draftApplication.company}
                 onChange={(event) =>
-                  onChangeDraft('company', event.target.value)
+                  handleChangeDraft('company', event.target.value)
                 }
               />
             </div>
@@ -92,7 +119,9 @@ export const AddEditApplicationModal = ({
                 type="text"
                 name="role"
                 value={draftApplication.role}
-                onChange={(event) => onChangeDraft('role', event.target.value)}
+                onChange={(event) =>
+                  handleChangeDraft('role', event.target.value)
+                }
               />
             </div>
             <div>
@@ -102,7 +131,7 @@ export const AddEditApplicationModal = ({
                 name="status"
                 value={draftApplication.status}
                 onChange={(event) =>
-                  onChangeDraft('status', event.target.value)
+                  handleChangeDraft('status', event.target.value)
                 }
               >
                 {Object.values(ApplicationStatus).map((status) => (
@@ -118,7 +147,7 @@ export const AddEditApplicationModal = ({
                 name="dateApplied"
                 value={draftApplication.dateApplied}
                 onChange={(event) =>
-                  onChangeDraft('dateApplied', event.target.value)
+                  handleChangeDraft('dateApplied', event.target.value)
                 }
               />
             </div>
@@ -147,7 +176,7 @@ export const AddEditApplicationModal = ({
           </div>
 
           <div className="add-form-actions">
-            <button type="button" onClick={onClose}>
+            <button type="button" onClick={handleCloseModal}>
               Cancel
             </button>
             <button type="submit">Save</button>
