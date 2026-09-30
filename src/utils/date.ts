@@ -1,4 +1,6 @@
-const months = {
+import type { ISOdate } from '../types/common';
+
+const months: Record<string, string> = {
   '01': 'Jan',
   '02': 'Feb',
   '03': 'Mar',
@@ -8,12 +10,12 @@ const months = {
   '07': 'Jul',
   '08': 'Aug',
   '09': 'Sep',
-  10: 'Oct',
-  11: 'Nov',
-  12: 'Dec',
+  '10': 'Oct',
+  '11': 'Nov',
+  '12': 'Dec',
 };
 
-export const formatDate = (isoDate) => {
+export const formatDate = (isoDate: ISOdate): string => {
   const [year, month, day] = isoDate.split('-');
 
   return `${day} ${months[month]} ${year}`;
