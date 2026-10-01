@@ -1,17 +1,18 @@
-import { useReducer } from 'react';
+import { useReducer, type PropsWithChildren } from 'react';
 import { storeReducer } from './storeReducer';
+import type { StoreState } from './storeReducer';
 import { StoreContext, StoreDispatchContext } from './storeContext';
 import { seedApplications } from '../data/seedApplications';
-import { ApplicationStatusFilterAll } from '../data/applicationStatus';
+import { StatusFilterAll } from '../data/applicationStatus';
 
-const storeInitialState = {
+const storeInitialState: StoreState = {
   applications: [...seedApplications],
   isApplicationActionModalOpen: false,
   applicationInEditId: null,
-  statusFilter: ApplicationStatusFilterAll,
+  statusFilter: StatusFilterAll,
 };
 
-export const StoreContextProvider = ({ children }) => {
+export const StoreContextProvider = ({ children }: PropsWithChildren) => {
   const [store, dispatch] = useReducer(storeReducer, storeInitialState);
 
   return (

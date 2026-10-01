@@ -1,5 +1,5 @@
 import { formatDate } from '../../utils/date';
-import { StoreActions } from '../../store/storeReducer';
+import { StoreAction } from '../../store/storeReducer';
 import { useStoreDispatch } from '../../store/storeContext';
 
 export const ApplicationRow = ({ application }) => {
@@ -25,15 +25,15 @@ export const ApplicationRow = ({ application }) => {
   };
 
   const handleFavoriteClick = () =>
-    dispatch({ type: StoreActions.favoriteApplication, id });
+    dispatch({ type: StoreAction.favoriteApplication, id });
 
   const handleEditClick = () => {
-    dispatch({ type: StoreActions.setApplicationInEditId, id });
-    dispatch({ type: StoreActions.toggleApplicationActionModal });
+    dispatch({ type: StoreAction.setApplicationInEditId, id });
+    dispatch({ type: StoreAction.toggleApplicationActionModal });
   };
 
   const handleDeleteClick = () =>
-    dispatch({ type: StoreActions.deleteApplication, id });
+    dispatch({ type: StoreAction.deleteApplication, id });
 
   return (
     <tr>

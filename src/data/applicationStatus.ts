@@ -7,7 +7,9 @@ export const ApplicationStatus = {
   Withdrawn: 'Withdrawn',
 } as const;
 
-export const ApplicationStatusFilterAll = 'All';
+export const StatusFilterAll = 'All';
 
 export type ApplicationStatusType =
   (typeof ApplicationStatus)[keyof typeof ApplicationStatus];
+
+export type StatusFilter = typeof StatusFilterAll | ApplicationStatusType;

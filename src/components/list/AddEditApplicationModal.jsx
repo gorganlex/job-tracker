@@ -3,7 +3,7 @@ import { ApplicationStatus } from '../../data/applicationStatus';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { getApplicationDraft } from '../../utils/application';
 import { useStore, useStoreDispatch } from '../../store/storeContext';
-import { StoreActions } from '../../store/storeReducer';
+import { StoreAction } from '../../store/storeReducer';
 
 export const AddEditApplicationModal = () => {
   const { applications, applicationInEditId } = useStore();
@@ -21,8 +21,8 @@ export const AddEditApplicationModal = () => {
   const companyFieldRef = useRef();
 
   const handleCloseModal = useCallback(() => {
-    dispatch({ type: StoreActions.toggleApplicationActionModal });
-    dispatch({ type: StoreActions.setApplicationInEditId, id: null });
+    dispatch({ type: StoreAction.toggleApplicationActionModal });
+    dispatch({ type: StoreAction.setApplicationInEditId, id: null });
   }, [dispatch]);
 
   useEffect(() => companyFieldRef.current.focus(), []);
@@ -72,8 +72,8 @@ export const AddEditApplicationModal = () => {
 
   const handleSave = () => {
     const type = applicationInEditId
-      ? StoreActions.editApplication
-      : StoreActions.addApplication;
+      ? StoreAction.editApplication
+      : StoreAction.addApplication;
 
     dispatch({
       type,

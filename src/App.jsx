@@ -3,14 +3,14 @@ import { ApplicationsTable } from './components/list/ApplicationsTable';
 import { ApplicationsStatusFilter } from './components/list/ApplicationsStatusFilter';
 import { AddEditApplicationModal } from './components/list/AddEditApplicationModal';
 import { useStore, useStoreDispatch } from './store/storeContext';
-import { StoreActions } from './store/storeReducer';
+import { StoreAction } from './store/storeReducer';
 
 export const App = () => {
   const { isApplicationActionModalOpen } = useStore();
   const dispatch = useStoreDispatch();
 
   const handleToggleApplicationActionModal = () =>
-    dispatch({ type: StoreActions.toggleApplicationActionModal });
+    dispatch({ type: StoreAction.toggleApplicationActionModal });
 
   return (
     <div>

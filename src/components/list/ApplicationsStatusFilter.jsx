@@ -1,9 +1,9 @@
 import {
   ApplicationStatus,
-  ApplicationStatusFilterAll,
+  StatusFilterAll,
 } from '../../data/applicationStatus';
 import { useStore, useStoreDispatch } from '../../store/storeContext';
-import { StoreActions } from '../../store/storeReducer';
+import { StoreAction } from '../../store/storeReducer';
 
 export const ApplicationsStatusFilter = () => {
   const { applications, statusFilter } = useStore();
@@ -19,12 +19,12 @@ export const ApplicationsStatusFilter = () => {
       return acc;
     },
     {
-      [ApplicationStatusFilterAll]: applications.length,
+      [StatusFilterAll]: applications.length,
     },
   );
 
   const handleStatusClick = (status) =>
-    dispatch({ type: StoreActions.setStatusFilter, statusFilter: status });
+    dispatch({ type: StoreAction.setStatusFilter, statusFilter: status });
 
   const renderStatusChip = (status) => (
     <button
@@ -39,7 +39,7 @@ export const ApplicationsStatusFilter = () => {
 
   return (
     <div>
-      {[ApplicationStatusFilterAll, ...Object.values(ApplicationStatus)].map(
+      {[StatusFilterAll, ...Object.values(ApplicationStatus)].map(
         renderStatusChip,
       )}
     </div>

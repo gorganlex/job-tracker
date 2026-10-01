@@ -1,13 +1,13 @@
 import { useStore } from '../../store/storeContext';
 import { ApplicationRow } from './ApplicationRow';
 import { NoApplications } from './NoApplications';
-import { ApplicationStatusFilterAll } from '../../data/applicationStatus';
+import { StatusFilterAll } from '../../data/applicationStatus';
 
 export const ApplicationsTable = () => {
   const { applications, statusFilter } = useStore();
 
   const filteredApplications =
-    statusFilter === ApplicationStatusFilterAll
+    statusFilter === StatusFilterAll
       ? applications
       : applications.filter((app) => app.status === statusFilter);
 
