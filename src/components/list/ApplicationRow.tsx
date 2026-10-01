@@ -1,27 +1,34 @@
 import { formatDate } from '../../utils/date';
 import { StoreAction } from '../../store/storeReducer';
 import { useStoreDispatch } from '../../store/storeContext';
+import type { Application } from '../../types/application';
+import type { ReactNode } from 'react';
 
-export const ApplicationRow = ({ application }) => {
+export const ApplicationRow = ({
+  application,
+}: {
+  application: Application;
+}) => {
   const dispatch = useStoreDispatch();
 
   const { id, company, role, status, dateApplied, location, tags, favorite } =
     application;
 
-  // tags can be duplicated so add an index to the key to ensure uniqueness
-  const renderTag = (tag, index) => <span key={`${tag}-${index}`}>{tag} </span>;
-
-  const renderTags = (tags) => {
+  const renderTags = (tags: string[]): ReactNode => {
     if (!tags.length) {
-      // should we display a placeholder or something if there are no tags?
       return undefined;
     }
 
     const [first, second, ...rest] = tags;
+    const tagsChipsTexts = [
+      first,
+      ...(second ? [second] : []),
+      ...(rest.length ? [`+${rest.length}`] : []),
+    ];
 
-    return [first, second, rest.length ? `+${rest.length}` : undefined]
-      .filter(Boolean)
-      .map((tag, index) => renderTag(tag, index));
+    return tagsChipsTexts.map((tag, index) => (
+      <span key={`${tag}-${index}`}>{tag} </span>
+    ));
   };
 
   const handleFavoriteClick = () =>
