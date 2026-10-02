@@ -33,7 +33,7 @@ export type StoreActionType =
     }
   | {
       type: typeof StoreAction.setApplicationInEditId;
-      id: Application['id'];
+      id: Application['id'] | null;
     }
   | {
       type: typeof StoreAction.deleteApplication;

@@ -25,17 +25,7 @@ export interface Application {
   updatedAt: ISOdateTime;
 }
 
-export type ApplicationDraft = Pick<
-  Application,
-  | 'id'
-  | 'company'
-  | 'role'
-  | 'status'
-  | 'dateApplied'
-  | 'tags'
-  | 'favorite'
-  | 'interviews'
->;
+export type ApplicationDraft = Omit<Application, 'createdAt' | 'updatedAt'>;
 
 export type WorkArrangement = 'Remote' | 'Hybrid' | 'On-site';
 

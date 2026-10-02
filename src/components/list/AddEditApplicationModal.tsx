@@ -1,9 +1,18 @@
 import { createPortal } from 'react-dom';
 import { ApplicationStatus } from '../../data/applicationStatus';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type MouseEvent,
+  type KeyboardEventHandler,
+  type ChangeEvent,
+} from 'react';
 import { getApplicationDraft } from '../../utils/application';
 import { useStore, useStoreDispatch } from '../../store/storeContext';
 import { StoreAction } from '../../store/storeReducer';
+import type { Application, ApplicationDraft } from '../../types/application';
 
 export const AddEditApplicationModal = () => {
   const { applications, applicationInEditId } = useStore();
@@ -13,22 +22,22 @@ export const AddEditApplicationModal = () => {
     ({ id }) => id === applicationInEditId,
   );
 
-  const [draftApplication, setDraftApplication] = useState(
+  const [draftApplication, setDraftApplication] = useState<ApplicationDraft>(
     applicationInEdit || getApplicationDraft,
   );
   const [draftTag, setDraftTag] = useState('');
 
-  const companyFieldRef = useRef();
+  const companyFieldRef = useRef<HTMLInputElement>(null);
 
   const handleCloseModal = useCallback(() => {
     dispatch({ type: StoreAction.toggleApplicationActionModal });
     dispatch({ type: StoreAction.setApplicationInEditId, id: null });
   }, [dispatch]);
 
-  useEffect(() => companyFieldRef.current.focus(), []);
+  useEffect(() => companyFieldRef.current?.focus(), []);
 
   useEffect(() => {
-    const escapeEventListener = (event) => {
+    const escapeEventListener = (event: KeyboardEvent) => {
       if (event.key === 'Escape') handleCloseModal();
     };
 
@@ -37,16 +46,34 @@ export const AddEditApplicationModal = () => {
     return () => document.removeEventListener('keydown', escapeEventListener);
   }, [handleCloseModal]);
 
-  const handleModalBackdropClick = (event) => {
+  const handleModalBackdropClick = (event: MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       handleCloseModal();
     }
   };
 
-  const handleChangeDraft = (field, value) =>
-    setDraftApplication((draft) => ({ ...draft, [field]: value }));
+  const handleChange = <K extends keyof ApplicationDraft>(
+    field: K,
+    value: ApplicationDraft[K],
+  ) => setDraftApplication((draft) => ({ ...draft, [field]: value }));
 
-  const handleTagInputKeyDown = (event) => {
+  const handleStatusChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const status = Object.values(ApplicationStatus).find(
+      (s) => s === event.target.value,
+    );
+
+    if (status) {
+      handleChange('status', status);
+
+      return;
+    }
+
+    throw Error('Wrong status');
+  };
+
+  const handleTagInputKeyDown: KeyboardEventHandler<HTMLInputElement> = (
+    event,
+  ) => {
     if (event.key === 'Enter') {
       event.preventDefault();
 
@@ -64,20 +91,28 @@ export const AddEditApplicationModal = () => {
     }
   };
 
-  const handleDeleteTag = (toDeleteIndex) =>
+  const handleDeleteTag = (index: number) =>
     setDraftApplication((app) => ({
       ...app,
-      tags: app.tags.filter((_, tagIndex) => tagIndex !== toDeleteIndex),
+      tags: app.tags.filter((_, tagIndex) => tagIndex !== index),
     }));
 
   const handleSave = () => {
+    const nowDateTime = new Date().toISOString();
+
+    const application: Application = {
+      ...draftApplication,
+      createdAt: applicationInEdit?.createdAt || nowDateTime,
+      updatedAt: nowDateTime,
+    };
+
     const type = applicationInEditId
       ? StoreAction.editApplication
       : StoreAction.addApplication;
 
     dispatch({
       type,
-      application: draftApplication,
+      application,
     });
 
     handleCloseModal();
@@ -108,7 +143,7 @@ export const AddEditApplicationModal = () => {
                 name="company"
                 value={draftApplication.company}
                 onChange={(event) =>
-                  handleChangeDraft('company', event.target.value)
+                  handleChange('company', event.target.value)
                 }
               />
             </div>
@@ -119,9 +154,7 @@ export const AddEditApplicationModal = () => {
                 type="text"
                 name="role"
                 value={draftApplication.role}
-                onChange={(event) =>
-                  handleChangeDraft('role', event.target.value)
-                }
+                onChange={(event) => handleChange('role', event.target.value)}
               />
             </div>
             <div>
@@ -130,9 +163,7 @@ export const AddEditApplicationModal = () => {
                 id="status"
                 name="status"
                 value={draftApplication.status}
-                onChange={(event) =>
-                  handleChangeDraft('status', event.target.value)
-                }
+                onChange={handleStatusChange}
               >
                 {Object.values(ApplicationStatus).map((status) => (
                   <option key={status}>{status}</option>
@@ -147,7 +178,7 @@ export const AddEditApplicationModal = () => {
                 name="dateApplied"
                 value={draftApplication.dateApplied}
                 onChange={(event) =>
-                  handleChangeDraft('dateApplied', event.target.value)
+                  handleChange('dateApplied', event.target.value)
                 }
               />
             </div>
