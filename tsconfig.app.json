@@ -13,8 +13,12 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
     "strict": true,
-    "allowJs": true
+    "allowJs": false
   },
   "include": ["src"]
 }

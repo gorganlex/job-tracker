@@ -18,5 +18,15 @@ const months: Record<string, string> = {
 export const formatDate = (isoDate: ISOdate): string => {
   const [year, month, day] = isoDate.split('-');
 
-  return `${day} ${months[month]} ${year}`;
+  if (!year || !month || !day) {
+    throw Error('Wrong date');
+  }
+
+  const monthName = months[month];
+
+  if (!monthName) {
+    throw Error('Wrong month');
+  }
+
+  return `${day} ${monthName} ${year}`;
 };
