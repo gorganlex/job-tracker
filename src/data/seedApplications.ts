@@ -1,10 +1,12 @@
-export const seedApplications = [
+import type { Application } from '../types/application';
+
+export const seedApplications: Application[] = [
   {
     id: '3f1a7c90-4b2e-4d81-9a63-7c5e12f8a001',
     company: 'Northwind Labs',
     role: 'Senior Frontend Developer',
-    status: 'Rejected',
-    dateApplied: '2026-07-16',
+    status: 'Applied',
+    dateApplied: '2026-07-1',
     location: 'Remote (EU)',
     workArrangement: 'Remote',
     source: 'LinkedIn',
