@@ -1,26 +1,20 @@
+import { Link, Route, Routes } from 'react-router';
 import './App.css';
-import { ApplicationsTable } from './components/list/ApplicationsTable';
-import { ApplicationsStatusFilter } from './components/list/ApplicationsStatusFilter';
-import { AddEditApplicationModal } from './components/list/AddEditApplicationModal';
-import { useStore, useStoreDispatch } from './store/storeContext';
-import { StoreAction } from './store/storeReducer';
+import { ApplicationsList } from './pages/ApplicationsList';
+import { Settings } from './pages/Settings';
 
 export const App = () => {
-  const { isApplicationActionModalOpen } = useStore();
-  const dispatch = useStoreDispatch();
-
-  const handleToggleApplicationActionModal = () =>
-    dispatch({ type: StoreAction.toggleApplicationActionModal });
-
   return (
-    <div>
-      <button onClick={handleToggleApplicationActionModal}>
-        Add Application
-      </button>
-      {isApplicationActionModalOpen && <AddEditApplicationModal />}
-      <ApplicationsStatusFilter />
-      <ApplicationsTable />
-    </div>
+    <>
+      <nav>
+        <Link to="/">Home</Link>
+        <Link to="/settings">Settings</Link>
+      </nav>
+      <Routes>
+        <Route path="/" element={<ApplicationsList />} />
+        <Route path="/settings" element={<Settings />} />
+      </Routes>
+    </>
   );
 };
 
