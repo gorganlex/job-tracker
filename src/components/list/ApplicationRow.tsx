@@ -1,8 +1,9 @@
-import { formatDate } from '../../utils/date';
-import { StoreAction } from '../../store/storeReducer';
-import { useStoreDispatch } from '../../store/storeContext';
-import type { Application } from '../../types/application';
 import type { ReactNode } from 'react';
+import { Link } from 'react-router';
+import { useStoreDispatch } from '../../store/storeContext';
+import { StoreAction } from '../../store/storeReducer';
+import type { Application } from '../../types/application';
+import { formatDate } from '../../utils/date';
 
 export const ApplicationRow = ({
   application,
@@ -52,7 +53,9 @@ export const ApplicationRow = ({
           STAR
         </button>
       </td>
-      <td>{company}</td>
+      <td>
+        <Link to={`/applications/${id}`}>{company}</Link>
+      </td>
       <td>{role}</td>
       <td>{status}</td>
       <td>{formatDate(dateApplied)}</td>
