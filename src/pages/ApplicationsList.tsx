@@ -23,6 +23,7 @@ export const ApplicationsList = () => {
       {deletedApplicationId && (
         <div>Recently deleted application: {deletedApplicationId}</div>
       )}
+
       <button onClick={handleToggleApplicationActionModal}>
         Add Application
       </button>

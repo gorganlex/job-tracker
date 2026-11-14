@@ -1,10 +1,10 @@
+import type { StatusFilter } from '../../data/applicationStatus';
 import {
   ApplicationStatus,
   StatusFilterAll,
 } from '../../data/applicationStatus';
-import { useStore, useStoreDispatch } from '../../store/storeContext';
-import { StoreAction } from '../../store/storeReducer';
-import type { StatusFilter } from '../../data/applicationStatus';
+import { useStatusFilter } from '../../hooks/useStatusFilter';
+import { useStore } from '../../store/storeContext';
 
 const filterStatuses: StatusFilter[] = [
   StatusFilterAll,
@@ -12,8 +12,8 @@ const filterStatuses: StatusFilter[] = [
 ];
 
 export const ApplicationsStatusFilter = () => {
-  const { applications, statusFilter } = useStore();
-  const dispatch = useStoreDispatch();
+  const { applications } = useStore();
+  const [statusFilter, setStatusFilter] = useStatusFilter();
 
   const statusCountMap = applications.reduce<Record<StatusFilter, number>>(
     (acc, app) => {
@@ -32,15 +32,12 @@ export const ApplicationsStatusFilter = () => {
     },
   );
 
-  const handleStatusClick = (status: StatusFilter) =>
-    dispatch({ type: StoreAction.setStatusFilter, statusFilter: status });
-
   const renderStatusChip = (status: StatusFilter) => (
     <button
       style={statusFilter === status ? { backgroundColor: 'lightgray' } : {}}
       key={status}
       disabled={!statusCountMap[status]}
-      onClick={() => handleStatusClick(status)}
+      onClick={() => setStatusFilter(status)}
     >
       {status} {statusCountMap[status]}
     </button>

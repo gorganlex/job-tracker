@@ -1,11 +1,9 @@
-import type { StatusFilter } from '../data/applicationStatus';
 import type { Application } from '../types/application';
 
 export interface StoreState {
   applications: Application[];
   isApplicationActionModalOpen: boolean;
   applicationInEditId: string | null;
-  statusFilter: StatusFilter;
 }
 
 export const StoreAction = {
@@ -41,10 +39,6 @@ export type StoreActionType =
     }
   | {
       type: typeof StoreAction.toggleApplicationActionModal;
-    }
-  | {
-      type: typeof StoreAction.setStatusFilter;
-      statusFilter: StatusFilter;
     };
 
 export const storeReducer = (
@@ -102,13 +96,6 @@ export const storeReducer = (
       return {
         ...state,
         isApplicationActionModalOpen: !state.isApplicationActionModalOpen,
-      };
-    }
-
-    case StoreAction.setStatusFilter: {
-      return {
-        ...state,
-        statusFilter: action.statusFilter,
       };
     }
 

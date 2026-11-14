@@ -1,10 +1,12 @@
+import { StatusFilterAll } from '../../data/applicationStatus';
+import { useStatusFilter } from '../../hooks/useStatusFilter';
 import { useStore } from '../../store/storeContext';
 import { ApplicationRow } from './ApplicationRow';
 import { NoApplications } from './NoApplications';
-import { StatusFilterAll } from '../../data/applicationStatus';
 
 export const ApplicationsTable = () => {
-  const { applications, statusFilter } = useStore();
+  const { applications } = useStore();
+  const [statusFilter] = useStatusFilter();
 
   const filteredApplications =
     statusFilter === StatusFilterAll
